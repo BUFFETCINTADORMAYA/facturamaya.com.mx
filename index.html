@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Buffet Contador Maya — Soluciones contables y fiscales</title>
+  <meta name="description" content="Buffet Contador Maya: servicios de contabilidad, asesoría fiscal, nóminas, declaraciones y regularización fiscal para personas físicas y morales." />
+  <meta name="theme-color" content="#0f4c81">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="Buffet Contador Maya" />
+  <meta property="og:description" content="Soluciones contables y fiscales con visión profesional." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/assets/og-image.png" />
+  <meta property="og:url" content="https://tusitio.example/" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Buffet Contador Maya" />
+  <meta name="twitter:description" content="Soluciones contables y fiscales con visión profesional." />
+
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Buffet Contador Maya",
+    "url": "https://tusitio.example/",
+    "logo": "https://tusitio.example/assets/logo.png",
+    "contactPoint": [{
+      "@type": "ContactPoint",
+      "telephone": "+52-800-000-0000",
+      "contactType": "customer service",
+      "areaServed": "MX",
+      "availableLanguage": "es"
+    }]
+  }
+  </script>
+
+  <style>
+    :root{
+      --brand-1:#0f4c81;
+      --brand-2:#1b6ca8;
+      --bg:#f4f6f8;
+      --muted:#6b7280;
+      --card-bg:#ffffff;
+      --radius:12px;
+      --gap:25px;
+      font-size:16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:var(--bg);
+      color:#111827;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+    }
+    .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;}
+    .skip-link:focus{left:10px;top:10px;width:auto;height:auto;background:#fff;padding:8px 12px;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,0.15);z-index:1000;}
+    header{background:linear-gradient(135deg,var(--brand-1),var(--brand-2));color:white;padding:40px 20px;}
+    .container{max-width:1100px;margin:0 auto;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;}
+    .brand img{width:52px;height:52px;border-radius:8px;object-fit:cover}
+    .brand h1{font-size:1.25rem;margin:0}
+    .brand p{margin:0;font-size:0.85rem;opacity:0.95}
+    nav a{color:rgba(255,255,255,0.95);text-decoration:none;margin-left:18px;font-weight:600;font-size:0.95rem;}
+    .cta{background:rgba(255,255,255,0.12);color:white;padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:600;border:1px solid rgba(255,255,255,0.06);}
+    header .hero{text-align:center;padding:28px 10px 8px;}
+    header h2{font-size:1.9rem;margin:10px 0}
+    header p.lead{font-size:1rem;opacity:0.95}
+    main{padding:48px 20px}
+    h2.section-title{font-size:1.5rem;text-align:center;margin-bottom:28px;color:var(--brand-1)}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--gap);}
+    .card{background:var(--card-bg);padding:22px;border-radius:var(--radius);box-shadow:0 8px 20px rgba(15,76,129,0.06);transition:transform .18s ease, box-shadow .18s ease;min-height:120px;}
+    .card:focus-within, .card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(15,76,129,0.08);}
+    .card h3{margin:0 0 8px 0;color:var(--brand-1);font-size:1.05rem}
+    .card p{margin:0;color:var(--muted)}
+    .contact-grid{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start;margin-top:30px;}
+    .contact-card{background:var(--card-bg);padding:20px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.05);}
+    label{display:block;font-weight:600;margin-bottom:8px;font-size:0.95rem}
+    input[type="text"], input[type="email"], textarea{width:100%;padding:10px 12px;border:1px solid #e6e9ee;border-radius:8px;font-size:0.95rem;margin-bottom:12px;background:white;}
+    textarea{min-height:120px;resize:vertical}
+    .btn{display:inline-block;background:var(--brand-1);color:white;padding:10px 14px;border-radius:8px;border:none;font-weight:600;cursor:pointer;text-decoration:none;}
+    footer{background:var(--brand-1);color:white;text-align:center;padding:22px 12px;margin-top:48px;}
+    a:focus, button:focus, input:focus, textarea:focus{outline:3px solid rgba(17,24,39,0.12);outline-offset:3px;}
+    .visually-hidden {position: absolute !important;height: 1px; width: 1px;overflow: hidden;clip: rect(1px, 1px, 1px, 1px);white-space: nowrap;clip-path: inset(50%);border: 0;padding: 0;margin: -1px;}
+    @media (max-width:900px){.contact-grid{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:flex-start}nav{margin-top:8px}}
+    @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <header role="banner">
+    <div class="container topbar" aria-hidden="false">
+      <!-- Logo decorativo + texto visible; enlace con aria-label y aria-describedby -->
+      <a href="/" class="brand" aria-label="Ir al inicio — Buffet Contador Maya" aria-describedby="logo-desc">
+        <img src="/assets/logo.png" alt="" />
+        <div>
+          <h1>Buffet Contador Maya</h1>
+          <p>Soluciones contables y fiscales</p>
+        </div>
+      </a>
+
+      <nav aria-label="Navegación principal">
+        <a href="#servicios">Servicios</a>
+        <a href="#contacto">Contacto</a>
+        <a class="cta" href="#contacto">Cotizar</a>
+      </nav>
+    </div>
+
+    <div class="container hero" role="img" aria-label="Contador y servicios fiscales">
+      <h2>Soluciones contables y fiscales con visión profesional</h2>
+      <p class="lead">Apoyamos a personas físicas y morales con servicios personalizados: contabilidad, nóminas, declaraciones y regularización.</p>
+    </div>
+  </header>
+
+  <!-- Descripción larga accesible solo para lectores de pantalla -->
+  <div id="logo-desc" class="visually-hidden">
+    Logotipo de Buffet Contador Maya: a la izquierda isotipo en forma de escudo cuadrado con esquinas redondeadas que contiene tres barras escalonadas color teal que aumentan de altura de izquierda a derecha, una flecha ascendente naranja sobre las barras y una curva/flecha azul oscuro que rodea la base y apunta hacia arriba; a la derecha, texto en mayúsculas sans‑serif "BUFFET" sobre "CONTADOR" con una línea horizontal naranja debajo y la palabra "MAYA" debajo de la línea, todo en azul oscuro.
+  </div>
+
+  <main id="main" class="container" role="main">
+    <section id="servicios" aria-labelledby="servicios-title">
+      <h2 id="servicios-title" class="section-title">Nuestros Servicios</h2>
+
+      <div class="cards" role="list">
+        <article role="listitem" class="card" aria-labelledby="s1">
+          <h3 id="s1">Contabilidad General</h3>
+          <p>Registro, control y análisis financiero para personas físicas y morales.</p>
+        </article>
+
+        <article role="listitem" class="card" aria-labelledby="s2">
+          <h3 id="s2">Asesoría Fiscal</h3>
+          <p>Cumplimiento oportuno de obligaciones fiscales y optimización tributaria.</p>
+        </article>
+
+        <article role="listitem" class="card" aria-labelledby="s3">
+          <h3 id="s3">Nóminas</h3>
+          <p>Administración de nómina, cálculo de impuestos y cumplimiento legal.</p>
+        </article>
+
+        <article role="listitem" class="card" aria-labelledby="s4">
+          <h3 id="s4">Declaraciones</h3>
+          <p>Presentación de declaraciones mensuales y anuales ante el SAT.</p>
+        </article>
+
+        <article role="listitem" class="card" aria-labelledby="s5">
+          <h3 id="s5">Consultoría</h3>
+          <p>Apoyo estratégico para la toma de decisiones financieras.</p>
+        </article>
+
+        <article role="listitem" class="card" aria-labelledby="s6">
+          <h3 id="s6">Regularización</h3>
+          <p>Ponemos al día tu situación fiscal de forma ordenada y segura.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="contacto" aria-labelledby="contacto-title" style="margin-top:40px;">
+      <h2 id="contacto-title" class="section-title">Contáctanos</h2>
+
+      <div class="contact-grid">
+        <div>
+          <div class="contact-card" aria-labelledby="contacto-info">
+            <h3 id="contacto-info">¿Necesitas ayuda con tus impuestos?</h3>
+            <p style="color:var(--muted)">Completa el formulario o escríbenos directamente a <a href="mailto:contacto@tusitio.example">contacto@tusitio.example</a> / llama al <a href="tel:+528000000000">800 000 0000</a>.</p>
+
+            <form id="contact-form" class="contact-card" onsubmit="return handleSubmit(event)" novalidate>
+              <label for="name">Nombre</label>
+              <input id="name" name="name" type="text" required placeholder="Tu nombre" />
+
+              <label for="email">Correo electrónico</label>
+              <input id="email" name="email" type="email" required placeholder="tu@ejemplo.com" />
+
+              <label for="message">Mensaje</label>
+              <textarea id="message" name="message" placeholder="Cuéntanos en qué podemos ayudarte..." required></textarea>
+
+              <button class="btn" type="submit">Enviar mensaje</button>
+              <p id="form-status" aria-live="polite" style="margin-top:10px;color:var(--muted);font-size:0.95rem"></p>
+            </form>
+          </div>
+        </div>
+
+        <aside class="contact-card" aria-labelledby="horario">
+          <h3 id="horario">Información</h3>
+          <p><strong>Horario:</strong> Lun - Vie: 9:00 - 18:00</p>
+          <p><strong>Ubicación:</strong> Ciudad de México (consulta agenda)</p>
+          <p style="margin-top:12px"><strong>Servicios destacados:</strong></p>
+          <ul>
+            <li>Regularización fiscal</li>
+            <li>Nómina y cumplimiento</li>
+            <li>Asesoría fiscal personalizada</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <p>© 2025 Buffet Contador Maya · Todos los derechos reservados</p>
+      <p style="font-size:0.9rem;opacity:0.9;margin-top:6px">
+        <a href="/avisoprivacidad" style="color:rgba(255,255,255,0.92)">Aviso de privacidad</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    function handleSubmit(e){
+      e.preventDefault();
+      const status = document.getElementById('form-status');
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      if(!name || !email || !message){
+        status.textContent = 'Por favor completa todos los campos.';
+        status.style.color = 'crimson';
+        return false;
+      }
+      status.style.color = 'green';
+      status.textContent = 'Tu mensaje se ha enviado correctamente. Nos pondremos en contacto pronto.';
+      e.target.reset();
+      return false;
+    }
+  </script>
+</body>
+</html>
