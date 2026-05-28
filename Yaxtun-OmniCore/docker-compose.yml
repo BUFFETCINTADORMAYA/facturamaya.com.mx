@@ -1,0 +1,65 @@
+version: '3.9'
+
+services:
+  yaxtun-core:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: yaxtun-omnicore
+    
+    ports:
+      - "3000:3000"    # Dashboard Web
+      - "5000:5000"    # API REST
+      - "5037:5037"    # ADB Server
+    
+    volumes:
+      - yaxtun-backups:/app/backups
+      - yaxtun-logs:/app/logs
+      - yaxtun-database:/app/database
+      - yaxtun-roms:/app/roms
+      - /dev/bus/usb:/dev/bus/usb:rw
+    
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=America/Mexico_City
+      - LANG=es_MX.UTF-8
+      - APP_NAME=Yaxtun-OmniCore
+      - APP_VERSION=2.0.0
+    
+    privileged: true
+    restart: unless-stopped
+    
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    command: run
+
+volumes:
+  yaxtun-backups:
+  yaxtun-logs:
+  yaxtun-database:
+  yaxtun-roms:
+
+networks:
+  default:
+    name: yaxtun-network
+    driver: bridge
