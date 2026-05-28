@@ -1,0 +1,79 @@
+version: '3.9'
+
+services:
+  phonerepairal:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: phonerepairal-system
+    
+    # Configuración de puertos
+    ports:
+      - "3000:3000"    # Web Dashboard
+      - "5000:5000"    # API REST
+      - "5037:5037"    # ADB Server
+    
+    # Configuración de volúmenes (persistencia de datos)
+    volumes:
+      - phonerepairal-backups:/app/backups
+      - phonerepairal-logs:/app/logs
+      - phonerepairal-database:/app/database
+      - phonerepairal-roms:/app/roms
+      - /dev/bus/usb:/dev/bus/usb:rw  # Acceso a dispositivos USB
+    
+    # Variables de entorno
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=America/Mexico_City
+      - LANG=es_MX.UTF-8
+      - ADB_HOST=0.0.0.0
+      - ADB_PORT=5037
+    
+    # Privilegios para acceso USB
+    privileged: true
+    
+    # Políticas de reinicio
+    restart: unless-stopped
+    
+    # Resource limits (opcional)
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    # Logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    
+    # Comando de inicio
+    command: run
+
+volumes:
+  phonerepairal-backups:
+    driver: local
+  phonerepairal-logs:
+    driver: local
+  phonerepairal-database:
+    driver: local
+  phonerepairal-roms:
+    driver: local
+
+networks:
+  default:
+    name: phonerepairal-network
+    driver: bridge
