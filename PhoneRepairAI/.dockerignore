@@ -1,0 +1,44 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__
+*.py[cod]
+*.egg-info
+.Python
+venv/
+env/
+ENV/
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Test & Coverage
+.pytest_cache
+.coverage
+htmlcov
+
+# Logs
+*.log
+logs/
+
+# Documentation
+docs/_build
+
+# Misc
+.env
+.env.local
+*.bak
+*.tmp
