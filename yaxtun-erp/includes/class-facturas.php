@@ -26,20 +26,17 @@ class Yaxtun_ERP_Facturas {
 
     public function crear_factura($datos) {
         try {
-            // Validar datos
             $datos_validados = $this->validar_datos_factura($datos);
             
             if (is_wp_error($datos_validados)) {
                 return $datos_validados;
             }
 
-            // Generar folio único
             $folio = $this->generar_folio();
             $datos_validados['folio'] = $folio;
             $datos_validados['user_id'] = get_current_user_id();
             $datos_validados['fecha_emision'] = current_time('mysql');
 
-            // Insertar en base de datos
             global $wpdb;
             $insert = $wpdb->insert(
                 $wpdb->prefix . 'yaxtun_facturas',
@@ -136,21 +133,25 @@ class Yaxtun_ERP_Facturas {
     }
 
     private function exportar_pdf($factura) {
-        // Implementación de generación de PDF
         try {
-            require_once YAXTUN_ERP_PLUGIN_DIR . 'vendors/dompdf/autoload.inc.php';
-            
             $html = $this->generar_html_factura($factura);
-            $dompdf = new Dompdf\Dompdf();
-            $dompdf->loadHtml($html);
-            $dompdf->setPaper('A4');
-            $dompdf->render();
+            
+            if (file_exists(YAXTUN_ERP_PLUGIN_DIR . 'vendors/dompdf/autoload.inc.php')) {
+                require_once YAXTUN_ERP_PLUGIN_DIR . 'vendors/dompdf/autoload.inc.php';
+                $dompdf = new Dompdf\Dompdf();
+                $dompdf->loadHtml($html);
+                $dompdf->setPaper('A4');
+                $dompdf->render();
+                $contenido = $dompdf->output();
+            } else {
+                $contenido = $html;
+            }
 
             $filename = 'Factura_' . $factura->folio . '_' . date('Y-m-d') . '.pdf';
             
             return array(
                 'success' => true,
-                'contenido' => $dompdf->output(),
+                'contenido' => $contenido,
                 'filename' => $filename
             );
         } catch (Exception $e) {
@@ -160,18 +161,20 @@ class Yaxtun_ERP_Facturas {
 
     private function exportar_xlsx($factura) {
         try {
+            if (!file_exists(YAXTUN_ERP_PLUGIN_DIR . 'vendors/phpoffice/spreadsheet/autoload.php')) {
+                return new WP_Error('xlsx_error', 'Librería PHPOffice no disponible');
+            }
+            
             require_once YAXTUN_ERP_PLUGIN_DIR . 'vendors/phpoffice/spreadsheet/autoload.php';
             
             $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
 
-            // Encabezado
             $sheet->setCellValue('A1', 'FACTURA');
             $sheet->setCellValue('A2', 'Folio: ' . $factura->folio);
             $sheet->setCellValue('A3', 'Fecha: ' . $factura->fecha_emision);
             $sheet->setCellValue('A4', 'Moneda: ' . $this->moneda);
             
-            // Datos de la factura
             $row = 6;
             $sheet->setCellValue('A' . $row, 'Concepto');
             $sheet->setCellValue('B' . $row, 'Cantidad');
@@ -204,7 +207,6 @@ class Yaxtun_ERP_Facturas {
             $writer = new PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
             $filename = 'Factura_' . $factura->folio . '_' . date('Y-m-d') . '.xlsx';
             
-            $output = ob_get_clean();
             ob_start();
             $writer->save('php://output');
             $contenido = ob_get_clean();
@@ -220,7 +222,6 @@ class Yaxtun_ERP_Facturas {
     }
 
     private function exportar_xml_sat($factura) {
-        // Generar XML compatible con SAT
         $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><Comprobante/>');
         
         $xml->addAttribute('version', '4.0');
@@ -229,7 +230,6 @@ class Yaxtun_ERP_Facturas {
         $xml->addAttribute('Folio', $factura->folio);
         $xml->addAttribute('Serie', 'SAT');
         
-        // Agregar información del emisor y receptor
         $emisor = $xml->addChild('Emisor');
         $emisor->addAttribute('Rfc', get_option('yaxtun_rfc_empresa', 'XXX000000XXX'));
         $emisor->addAttribute('Nombre', get_option('yaxtun_nombre_empresa', 'Empresa'));
@@ -238,7 +238,6 @@ class Yaxtun_ERP_Facturas {
         $receptor->addAttribute('Rfc', isset($factura->cliente_rfc) ? $factura->cliente_rfc : 'XAXX010101000');
         $receptor->addAttribute('UsoCFDI', '601');
         
-        // Conceptos
         $conceptos = $xml->addChild('Conceptos');
         $datos = json_decode($factura->datos_json, true);
         if (is_array($datos)) {
@@ -251,7 +250,6 @@ class Yaxtun_ERP_Facturas {
             }
         }
         
-        // Totales
         $totales = $xml->addChild('Totales');
         $totales->addAttribute('Subtotal', $factura->subtotal);
         $totales->addAttribute('ImpuestosTraslados', $factura->iva);
@@ -275,10 +273,10 @@ class Yaxtun_ERP_Facturas {
         $datos = json_decode($factura->datos_json, true);
         if (is_array($datos)) {
             foreach ($datos as $item) {
-                $csv .= isset($item['concepto']) ? $item['concepto'] : '' . ",";
-                $csv .= isset($item['cantidad']) ? $item['cantidad'] : '' . ",";
-                $csv .= isset($item['precio']) ? $item['precio'] : '' . ",";
-                $csv .= isset($item['total']) ? $item['total'] : '' . "\n";
+                $csv .= (isset($item['concepto']) ? $item['concepto'] : '') . ",";
+                $csv .= (isset($item['cantidad']) ? $item['cantidad'] : '') . ",";
+                $csv .= (isset($item['precio']) ? $item['precio'] : '') . ",";
+                $csv .= (isset($item['total']) ? $item['total'] : '') . "\n";
             }
         }
         
@@ -328,14 +326,16 @@ class Yaxtun_ERP_Facturas {
     }
 
     private function exportar_ods($factura) {
-        // Implementación ODS similar a XLSX pero con formato ODS
         try {
+            if (!file_exists(YAXTUN_ERP_PLUGIN_DIR . 'vendors/phpoffice/spreadsheet/autoload.php')) {
+                return new WP_Error('ods_error', 'Librería PHPOffice no disponible');
+            }
+            
             require_once YAXTUN_ERP_PLUGIN_DIR . 'vendors/phpoffice/spreadsheet/autoload.php';
             
             $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
 
-            // Datos similares a XLSX
             $sheet->setCellValue('A1', 'FACTURA');
             $sheet->setCellValue('A2', 'Folio: ' . $factura->folio);
             $sheet->setCellValue('A3', 'Fecha: ' . $factura->fecha_emision);
@@ -377,9 +377,6 @@ class Yaxtun_ERP_Facturas {
 
     private function exportar_zip_completo($factura) {
         try {
-            // Crear archivo ZIP con todos los formatos
-            require_once YAXTUN_ERP_PLUGIN_DIR . 'vendors/PHPZip/PHPZip.php';
-            
             $zip = new ZipArchive();
             $temp_file = wp_tempnam('yaxtun_', '.zip');
             
@@ -387,10 +384,9 @@ class Yaxtun_ERP_Facturas {
                 return new WP_Error('zip_error', 'No se pudo crear el archivo ZIP');
             }
             
-            // Agregar todos los formatos
             foreach (array('PDF', 'XLSX', 'XML', 'CSV', 'JSON', 'HTML', 'ODS') as $formato) {
                 $resultado = $this->exportar_factura($factura->id, $formato);
-                if (isset($resultado['contenido'])) {
+                if (isset($resultado['contenido']) && !is_wp_error($resultado)) {
                     $zip->addFromString($resultado['filename'], $resultado['contenido']);
                 }
             }
