@@ -12,7 +12,8 @@ class Yaxtun_ERP_Admin {
     public static function render_dashboard() {
         if (!current_user_can('manage_options')) {
             wp_die('No tienes permisos para acceder a esta página');
-                
+        }
+        
         include YAXTUN_ERP_PLUGIN_DIR . 'templates/admin/dashboard.php';
     }
 
